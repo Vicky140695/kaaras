@@ -24,19 +24,19 @@ function createSupabaseFetch(supabaseKey: string): typeof fetch {
   };
 }
 
-function createSupabaseClient() {
-  const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-  const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const DEFAULT_SUPABASE_URL = "https://raxetvdkupzuzgpapxor.supabase.co";
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY =
+  "sb_publishable_Pt6SOnScTsHgh4cTzFkpdQ_5Icv6QA8";
 
-  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    const missing = [
-      ...(!SUPABASE_URL ? ["VITE_SUPABASE_URL"] : []),
-      ...(!SUPABASE_PUBLISHABLE_KEY ? ["VITE_SUPABASE_PUBLISHABLE_KEY"] : []),
-    ];
-    throw new Error(
-      `Missing Supabase environment variable(s): ${missing.join(", ")}.`,
-    );
-  }
+function createSupabaseClient() {
+  // VITE_* values are used when Vercel/Vite injects them at build time.
+  // The defaults are intentionally public Supabase client values so the site
+  // remains functional even when the hosting environment misses the vars.
+  const SUPABASE_URL =
+    import.meta.env.VITE_SUPABASE_URL || DEFAULT_SUPABASE_URL;
+  const SUPABASE_PUBLISHABLE_KEY =
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+    DEFAULT_SUPABASE_PUBLISHABLE_KEY;
 
   return createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
     global: {
